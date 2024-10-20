@@ -5,6 +5,7 @@ import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -34,24 +35,27 @@ import java.util.List;
 public class SecurityConfig {
 
     //Sin LA ANOTACION @Preauthorize
-   /*
+
      @Bean
      public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-     return httpSecurity
-     .csrf(http -> {
-                    // Configurar los endpoints publicos
-                    http.requestMatchers(HttpMethod.GET, "/auth/get").permitAll();
+         return httpSecurity
+                 .csrf(csrf -> csrf.disable())
+                 .httpBasic(Customizer.withDefaults())
+                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                 .authorizeHttpRequests(http -> {
+                     // Configurar los endpoints publicos
+                     http.requestMatchers(HttpMethod.GET, "/auth/get").permitAll();
 
-                    // Cofnigurar los endpoints privados
-                    http.requestMatchers(HttpMethod.POST, "/auth/post").hasAnyRole("ADMIN", "DEVELOPER");
-                    http.requestMatchers(HttpMethod.PATCH, "/auth/patch").hasAnyAuthority("REFACTOR");
+                     // Cofnigurar los endpoints privados
+                     http.requestMatchers(HttpMethod.POST, "/auth/post").hasAnyRole("ADMIN", "DEVELOPER");
+                     http.requestMatchers(HttpMethod.PATCH, "/auth/patch").hasAnyAuthority("REFACTOR");
 
-                    // Configurar el resto de endpoint - NO ESPECIFICADOS
-                    http.anyRequest().denyAll();
-                })
-     .build();
+                     // Configurar el resto de endpoint - NO ESPECIFICADOS
+                     http.anyRequest().denyAll();
+                 })
+                 .build();
      }
-     */
+         /*
 
     //CON LA ANOTACION @Preauthorize
     @Bean
@@ -61,7 +65,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
-    }
+    }*/
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -81,13 +85,16 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         // NoOpPasswordEncoder --> DEVUELVE un password encoder NO ENCRIPTADO
         //¡¡¡IMPORTANTE!!! USAR DE PRUEBA
-        return NoOpPasswordEncoder.getInstance();
+        //return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
 
         /**Usaremos en Producción este que Encripta:
          * BCryptPasswordEncoder();
          * */
-
     }
+    /* public static void main(String[] args) {
+        System.out.println(new BCryptPasswordEncoder().encode("1234"));
+    }*/
 
 
 }

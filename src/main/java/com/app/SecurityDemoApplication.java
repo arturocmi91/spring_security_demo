@@ -66,7 +66,7 @@ public class SecurityDemoApplication {
 
 			User userArturo= User.builder()
 					.userName("arturo")
-					.password("1234")
+					.password("$2a$10$QWPvTAJ4P6XrlWkpEJ0EQuM6zEdMlUVJ8JB3jggA0/sP5p1ODnxZC")
 					.isEnable(true)
 					.accountNoExpired(true)
 					.accountNoLocked(true)
@@ -76,7 +76,7 @@ public class SecurityDemoApplication {
 
 			User userMagna= User.builder()
 					.userName("magna")
-					.password("1234")
+					.password("$2a$10$QWPvTAJ4P6XrlWkpEJ0EQuM6zEdMlUVJ8JB3jggA0/sP5p1ODnxZC")
 					.isEnable(true)
 					.accountNoExpired(true)
 					.accountNoLocked(true)
@@ -85,7 +85,7 @@ public class SecurityDemoApplication {
 					.build();
 			User userGreta= User.builder()
 					.userName("greta")
-					.password("1234")
+					.password("$2a$10$QWPvTAJ4P6XrlWkpEJ0EQuM6zEdMlUVJ8JB3jggA0/sP5p1ODnxZC")
 					.isEnable(true)
 					.accountNoExpired(true)
 					.accountNoLocked(true)
@@ -95,7 +95,7 @@ public class SecurityDemoApplication {
 
 			User userMarco= User.builder()
 					.userName("marco")
-					.password("1234")
+					.password("$2a$10$QWPvTAJ4P6XrlWkpEJ0EQuM6zEdMlUVJ8JB3jggA0/sP5p1ODnxZC")
 					.isEnable(true)
 					.accountNoExpired(true)
 					.accountNoLocked(true)
