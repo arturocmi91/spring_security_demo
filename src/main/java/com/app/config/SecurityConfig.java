@@ -1,6 +1,8 @@
 package com.app.config;
 
+import com.app.config.filter.JwtTokenValidator;
 import com.app.service.UserDetailServiceImpl;
+import com.app.util.JwtUtils;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +25,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,9 @@ import java.util.List;
 
 public class SecurityConfig {
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     //Sin LA ANOTACION @Preauthorize
 
      @Bean
@@ -44,15 +50,17 @@ public class SecurityConfig {
                  .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                  .authorizeHttpRequests(http -> {
                      // Configurar los endpoints publicos
-                     http.requestMatchers(HttpMethod.GET, "/auth/get").permitAll();
+                     http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
 
                      // Cofnigurar los endpoints privados
-                     http.requestMatchers(HttpMethod.POST, "/auth/post").hasAnyRole("ADMIN", "DEVELOPER");
-                     http.requestMatchers(HttpMethod.PATCH, "/auth/patch").hasAnyAuthority("REFACTOR");
+                     http.requestMatchers(HttpMethod.POST, "/method/post").hasAnyRole("ADMIN", "DEVELOPER");
+                     http.requestMatchers(HttpMethod.PATCH, "/method/patch").hasAnyAuthority("REFACTOR");
+                     http.requestMatchers(HttpMethod.GET, "/method/get").hasAnyRole("INVITED");
 
                      // Configurar el resto de endpoint - NO ESPECIFICADOS
                      http.anyRequest().denyAll();
                  })
+                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                  .build();
      }
          /*
@@ -81,7 +89,7 @@ public class SecurityConfig {
     }
 
 
-
+    @Bean
     public PasswordEncoder passwordEncoder(){
         // NoOpPasswordEncoder --> DEVUELVE un password encoder NO ENCRIPTADO
         //¡¡¡IMPORTANTE!!! USAR DE PRUEBA

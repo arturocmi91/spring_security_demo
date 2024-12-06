@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/method")
 
 //@PreAuthorize("denyAll()")//Valida cada uno de los endpoint al menos que se le indique lo contrario
 public class TestAuthController {
